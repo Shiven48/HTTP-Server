@@ -22,13 +22,15 @@ public class Server {
     }
 
     private void handleClient() {
-        try{
-            Socket socket = serverSocket.accept();
-            Handler handler = new Handler(socket);
-            handler.readMessage();
-//            handler.sendConnectionMessage();
-        } catch(IOException io){
-            System.out.println("Cannot bind the socket server to the client");
+        while(true) {
+            try {
+                Socket socket = serverSocket.accept();
+                Handler handler = new Handler(socket);
+                handler.handleClientPerThread();
+            } catch (IOException io) {
+                System.out.println("Cannot bind the socket server to the client");
+                break;
+            }
         }
     }
 }

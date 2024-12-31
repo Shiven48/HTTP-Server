@@ -1,12 +1,14 @@
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Scanner;
 
 public class Client {
 
     private final Socket socket;
     private final BufferedReader bufferedReader;
     private final BufferedWriter bufferedWriter;
+    private final Scanner sc = new Scanner(System.in);
 
     public Client(Socket socket) throws IOException {
         this.socket = socket;
@@ -20,7 +22,7 @@ public class Client {
         try {
             Socket socket = new Socket("127.0.0.1",8080);
             Client c = new Client(socket);
-            c.connect();
+            c.sendMessage();
         } catch(UnknownHostException unknownHost) {
             System.out.println("Unknown Host "+unknownHost);
         } catch(IOException e){
@@ -28,14 +30,19 @@ public class Client {
         }
     }
 
-    public void connect(){
-        try {
-            bufferedWriter.write("Hello from the Client");
-            bufferedWriter.newLine();
-            bufferedWriter.flush();
-            System.out.println("Message Sent");
-        } catch(IOException io){
-            System.out.println("Cannot write to the buffer");
+    public void sendMessage(){
+        while(!socket.isClosed()) {
+            try {
+                String MessageToPass;
+                MessageToPass = sc.nextLine();
+                bufferedWriter.write(MessageToPass);
+                bufferedWriter.newLine();
+                bufferedWriter.flush();
+                System.out.println("Message Sent");
+            } catch (IOException io) {
+                System.out.println("Cannot write to the buffer");
+                break;
+            }
         }
     }
 }
