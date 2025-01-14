@@ -1,14 +1,13 @@
 import java.io.*;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.Scanner;
 
 public class Client {
-
     private final Socket socket;
     private final BufferedReader bufferedReader;
     private final BufferedWriter bufferedWriter;
     private final Scanner sc = new Scanner(System.in);
+    private volatile boolean running = true;
 
     public Client(Socket socket) throws IOException {
         this.socket = socket;
@@ -16,33 +15,65 @@ public class Client {
         this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
     }
 
-    // Will need to execute it to open the client connection
-    // NOTE :- Should be invoked only after starting the server
-    public static void main(String[] args){
-        try {
-            Socket socket = new Socket("127.0.0.1",8080);
-            Client c = new Client(socket);
-            c.sendMessage();
-        } catch(UnknownHostException unknownHost) {
-            System.out.println("Unknown Host "+unknownHost);
-        } catch(IOException e){
-            System.out.println("IO Exception while connect to socket"+e);
+    public static void main(String[] args) {
+        try (Socket socket = new Socket("127.0.0.1", 8080)) {
+            Client client = new Client(socket);
+            client.startCommunication();
+        } catch (IOException e) {
+            System.out.println("Error connecting to server: " + e.getMessage());
         }
     }
 
-    public void sendMessage(){
-        while(!socket.isClosed()) {
+    public void startCommunication() {
+        Thread receiveThread = new Thread(this::receiveMessages);
+        receiveThread.setDaemon(true);
+        receiveThread.start();
+
+        while (running && !socket.isClosed()) {
             try {
-                String MessageToPass;
-                MessageToPass = sc.nextLine();
-                bufferedWriter.write(MessageToPass);
-                bufferedWriter.newLine();
-                bufferedWriter.flush();
-                System.out.println("Message Sent");
-            } catch (IOException io) {
-                System.out.println("Cannot write to the buffer");
+                String message = sc.nextLine();
+                sendMessage(message);
+            } catch (IOException e) {
+                System.out.println("Error sending message: " + e.getMessage());
                 break;
             }
+        }
+        closeResources();
+    }
+
+    private void receiveMessages() {
+        try {
+            String message;
+            while (running && !socket.isClosed() && (message = bufferedReader.readLine()) != null) {
+                System.out.println("Server: " + message);
+            }
+        } catch (IOException e) {
+            if (running) {
+                System.out.println("Connection to server lost: " + e.getMessage());
+            }
+        } finally {
+            running = false;
+        }
+    }
+
+    private void sendMessage(String message) throws IOException {
+        if (!socket.isClosed()) {
+            bufferedWriter.write(message);
+            bufferedWriter.newLine();
+            bufferedWriter.flush();
+            System.out.println("You: " + message);
+        }
+    }
+
+    private void closeResources() {
+        running = false;
+        try {
+            if (bufferedReader != null) bufferedReader.close();
+            if (bufferedWriter != null) bufferedWriter.close();
+            if (socket != null) socket.close();
+            sc.close();
+        } catch (IOException e) {
+            System.out.println("Error closing resources: " + e.getMessage());
         }
     }
 }
