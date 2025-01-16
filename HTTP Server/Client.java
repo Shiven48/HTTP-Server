@@ -15,20 +15,13 @@ public class Client {
         this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
     }
 
-    public static void main(String[] args) {
-        try (Socket socket = new Socket("127.0.0.1", 8080)) {
-            Client client = new Client(socket);
-            client.startCommunication();
-        } catch (IOException e) {
-            System.out.println("Error connecting to server: " + e.getMessage());
-        }
-    }
-
     public void startCommunication() {
         Thread receiveThread = new Thread(this::receiveMessages);
         receiveThread.setDaemon(true);
+        // Start Receiver thread
         receiveThread.start();
 
+        // Enter message Loop by Main Thread
         while (running && !socket.isClosed()) {
             try {
                 String message = sc.nextLine();
@@ -41,6 +34,7 @@ public class Client {
         closeResources();
     }
 
+    // Running on a separate thread i.e. Receiver Thread
     private void receiveMessages() {
         try {
             String message;
@@ -49,7 +43,7 @@ public class Client {
             }
         } catch (IOException e) {
             if (running) {
-                System.out.println("Connection to server lost: " + e.getMessage());
+                throw new RuntimeException("Connection to server lost: " + e.getMessage());
             }
         } finally {
             running = false;
@@ -76,4 +70,14 @@ public class Client {
             System.out.println("Error closing resources: " + e.getMessage());
         }
     }
+
+    public static void main(String[] args) {
+        try (Socket socket = new Socket("127.0.0.1", 8080)) {
+            Client client = new Client(socket);
+            client.startCommunication();
+        } catch (IOException e) {
+            System.out.println("Error connecting to server: " + e.getMessage());
+        }
+    }
+
 }

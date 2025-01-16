@@ -27,7 +27,7 @@ public class Handler {
                 System.out.println("Client disconnected");
                 return null;
             }
-            System.out.println("Received from client: " + request);
+            System.out.println("client: " + request);
             return request;
         } catch (IOException io) {
             System.out.println("Cannot read from client: " + io.getMessage());
@@ -36,21 +36,24 @@ public class Handler {
     }
 
     public void processedClientOutput(String message) throws IOException {
-        bufferedWriter.write(message);  // Write the actual message, not its length
-        bufferedWriter.newLine();       // Add newline for readLine() on client side
+        bufferedWriter.write(message);
+        bufferedWriter.newLine();
         bufferedWriter.flush();
         System.out.println("Sent response to client: " + message);
     }
 
     public void handleClientPerThread() {
         try {
+            // Send Initial message to client
             processedClientOutput("Connected to server!");
 
             while (!socket.isClosed()) {
+                // If bufferReader is ready or have data from client then only the condition will be true'
+                // System.out.println("I am waiting for a message from the client");
                 if (bufferedReader.ready()) {
                     String message = readClientInput();
                     if (message != null) {
-                        processedClientOutput("Server received: " + message);
+                        processedClientOutput("Server: " + message);
                     } else {
                         System.out.println("Client has closed the connection");
                         break;

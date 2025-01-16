@@ -15,21 +15,13 @@ public class Server {
         System.out.println("Server Started, waiting for Clients...");
     }
 
-    public static void main(String[] args) {
-        try {
-            ServerSocket serverSocket = new ServerSocket(8080);
-            Server server = new Server(serverSocket);
-            server.startServer();
-        } catch(IOException io) {
-            System.out.println("IO exception on server: " + io.getMessage());
-        }
-    }
-
     private void startServer() {
         try {
             while (!serverSocket.isClosed()) {
+                // new Client Connected
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("Added a client");
+                // Initialize IO streams by Handler Constructor
                 Handler clientHandler = new Handler(clientSocket);
                 executorService.execute(clientHandler::handleClientPerThread);
             }
@@ -46,4 +38,15 @@ public class Server {
             System.out.println("Error closing server: " + e.getMessage());
         }
     }
+
+    public static void main(String[] args) {
+        try {
+            ServerSocket serverSocket = new ServerSocket(8080);
+            Server server = new Server(serverSocket);
+            server.startServer();
+        } catch(IOException io) {
+            System.out.println("IO exception on server: " + io.getMessage());
+        }
+    }
+
 }
