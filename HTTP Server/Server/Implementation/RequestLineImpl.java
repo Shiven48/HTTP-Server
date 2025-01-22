@@ -1,7 +1,7 @@
 package Implementation;
 
 import Common.RequestLine;
-import Common.RequestType;
+import Common.Enums.RequestType;
 import Implementation.Builder.RequestLineBuilder;
 
 public class RequestLineImpl implements RequestLine {

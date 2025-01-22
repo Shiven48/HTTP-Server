@@ -4,9 +4,7 @@ import Common.RequestBody;
 import Common.RequestHeader;
 import Common.RequestLine;
 
-import java.util.concurrent.ConcurrentHashMap;
-
-public class HTTPRequestHeader<T> {
+public class HTTPRequest<T> {
 
     private RequestLine requestLine;
     private RequestHeader header;

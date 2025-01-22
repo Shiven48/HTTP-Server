@@ -1,4 +1,4 @@
-package Common;
+package Common.Enums;
 
 public enum RequestType {
     GET,

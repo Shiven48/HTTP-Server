@@ -5,13 +5,13 @@ import Request.ResourceData;
 import java.util.concurrent.ConcurrentHashMap;
 
 // This is a temporary implementation for just making a structure
-public class BodyBuilderImpl<T> {
+public class RequestBodyBuilder<T> {
 
     private ResourceData<T> resourceData;
     private String resource;
     private ConcurrentHashMap<String, ResourceData<T>> resources;
 
-    public BodyBuilderImpl(
+    public RequestBodyBuilder(
             String resource,
             ResourceData<T> resourceData
     ){
