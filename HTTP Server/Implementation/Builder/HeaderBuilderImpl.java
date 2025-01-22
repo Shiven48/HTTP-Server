@@ -1,10 +1,10 @@
 package Builder;
 
-import Interfaces.Header;
+import Common.RequestHeader;
 
 import java.util.List;
 
-public class HeaderBuilderImpl implements Header{
+public class HeaderBuilderImpl implements RequestHeader {
 
     private String host;
 

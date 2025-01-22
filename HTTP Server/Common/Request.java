@@ -1,8 +1,8 @@
-package Interfaces;
+package Common;
 
 import java.util.List;
 
-public interface RequestHeader {
+public interface Request {
 
     public Enum<RequestType> requestType();
 
