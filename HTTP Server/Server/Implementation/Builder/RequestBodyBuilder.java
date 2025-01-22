@@ -1,25 +1,39 @@
 package Implementation.Builder;
 
+import Common.RequestBody;
+import Implementation.RequestBodyImpl;
 import Request.ResourceData;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-// This is a temporary implementation for just making a structure
-public class RequestBodyBuilder<T> {
+// This class is having a map of resource path and the actual resource
+public class RequestBodyBuilder {
 
-    private ResourceData<T> resourceData;
-    private String resource;
-    private ConcurrentHashMap<String, ResourceData<T>> resources;
+    // This two fields are the path and the data(json)
+    private String resourceFileSystemAddress;
+    private ResourceData resource;
 
-    public RequestBodyBuilder(
-            String resource,
-            ResourceData<T> resourceData
-    ){
-        resources.put(resource,resourceData);
+    // This is the concurrent map for mapping the path and data(json)
+    private ConcurrentHashMap<String, ResourceData> resources;
+
+    public RequestBodyBuilder(){
+        this.resources = new ConcurrentHashMap<>();
     }
 
-    private ConcurrentHashMap<String, ResourceData<T>> resources(){
-        return null;
+    public RequestBodyBuilder setResources(String resourceFileSystemAddress, ResourceData resource){
+        if((!(resourceFileSystemAddress.trim().isEmpty()) && resource != null)){
+            this.resources.put(resourceFileSystemAddress, resource);
+            return this;
+        }
+        return this;
+    }
+
+    public ConcurrentHashMap<String, ResourceData> getResources(){
+        return resources;
+    }
+
+    public RequestBody build(){
+        return new RequestBodyImpl(this);
     }
 
 }
