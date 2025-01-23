@@ -1,12 +1,17 @@
+import Implementation.RequestHandler;
+
 import java.io.*;
 import java.net.Socket;
 
 public class Handler {
+
     private static final int BUFFER_SIZE = 4096;
     private final Socket socket;
     private final BufferedReader bufferedReader;
     private final BufferedWriter bufferedWriter;
+    private final RequestHandler requestHandler;
 
+    // Constructing the Handler Object
     public Handler(Socket socket) throws IOException {
         this.socket = socket;
         this.bufferedReader = new BufferedReader(
@@ -17,29 +22,31 @@ public class Handler {
                 new OutputStreamWriter(socket.getOutputStream()),
                 BUFFER_SIZE
         );
+        this.requestHandler = new RequestHandler();
         System.out.println("Initialized the handler constructor for the handler class");
     }
 
     public String readClientInput() {
         try {
             String request = bufferedReader.readLine();
+            String response = requestHandler.handleClientRequest(request);
             if (request == null) {
                 System.out.println("Client disconnected");
                 return null;
             }
             System.out.println("client: " + request);
-            return request;
+            return response;
         } catch (IOException io) {
             System.out.println("Cannot read from client: " + io.getMessage());
             return null;
         }
     }
 
-    public void processedClientOutput(String message) throws IOException {
-        bufferedWriter.write(message);
+    public void processedClientOutput(String response) throws IOException {
+        bufferedWriter.write(response);
         bufferedWriter.newLine();
         bufferedWriter.flush();
-        System.out.println("Sent response to client: " + message);
+        System.out.println("Sent response to client: " + response);
     }
 
     public void handleClientPerThread() {
@@ -48,12 +55,11 @@ public class Handler {
             processedClientOutput("Connected to server!");
 
             while (!socket.isClosed()) {
-                // If bufferReader is ready or have data from client then only the condition will be true'
-                // System.out.println("I am waiting for a message from the client");
+                // If bufferReader is ready or have data from client then only the condition will be true (Blocking)
                 if (bufferedReader.ready()) {
-                    String message = readClientInput();
-                    if (message != null) {
-                        processedClientOutput("Server: " + message);
+                    String response = readClientInput();
+                    if (response != null) {
+                        processedClientOutput("Server: " + response);
                     } else {
                         System.out.println("Client has closed the connection");
                         break;
