@@ -1,0 +1,48 @@
+Header :GET /some/path HTTP/1.1
+Header :User-Agent: PostmanRuntime/7.43.0
+Header :Accept: */*
+Header :Postman-Token: ced82206-fb90-43eb-8875-75cf2a4720ba
+Header :Host: localhost:8080
+Header :Accept-Encoding: gzip, deflate, br
+Header :Connection: keep-alive
+
+client: [GET /some/path HTTP/1.1, User-Agent: PostmanRuntime/7.43.0, Accept: */*, Postman-Token: ced82206-fb90-43eb-8875-75cf2a4720ba,
+            Host: localhost:8080, Accept-Encoding: gzip, deflate, br, Connection: keep-alive]
+
+-----------------------------------------------------------------------------------------------------------------------------------------------
+
+Header :POST /some/path HTTP/1.1
+Header :Content-Type: application/json
+Header :User-Agent: PostmanRuntime/7.43.0
+Header :Accept: */*
+Header :Postman-Token: 8f9149b5-623e-4d08-ab02-7311c0788071
+Header :Host: localhost:8080
+Header :Accept-Encoding: gzip, deflate, br
+Header :Connection: keep-alive
+Header :Content-Length: 24
+
+client: [POST /some/path HTTP/1.1, Content-Type: application/json, User-Agent: PostmanRuntime/7.43.0, Accept: */*,
+            Postman-Token: 8f9149b5-623e-4d08-ab02-7311c0788071, Host: localhost:8080, Accept-Encoding: gzip, deflate, br,
+            Connection: keep-alive, Content-Length: 24]
+
+-----------------------------------------------------------------------------------------------------------------------------------------------
+
+Header :POST /some/path HTTP/1.1
+Header :Content-Type: application/json
+Header :User-Agent: PostmanRuntime/7.43.0
+Header :Accept: */*
+Header :Postman-Token: 64592acc-372c-4969-bcd3-b96a928398a6
+Header :Host: localhost:8080
+Header :Accept-Encoding: gzip, deflate, br
+Header :Connection: keep-alive
+Header :Content-Length: 24
+Header :{
+    "name": "Keto"
+}
+client: [POST /some/path HTTP/1.1, Content-Type: application/json, User-Agent: PostmanRuntime/7.43.0, Accept: */*, Postman-Token: 64592acc-372c-4969-bcd3-b96a928398a6, Host: localhost:8080, Accept-Encoding: gzip, deflate, br, Connection: keep-alive, Content-Length: 24, {
+    "name": "Keto"
+}]
+Sent response to client: Server: [POST /some/path HTTP/1.1, Content-Type: application/json, User-Agent: PostmanRuntime/7.43.0, Accept: */*, Postman-Token: 64592acc-372c-4969-bcd3-b96a928398a6, Host: localhost:8080, Accept-Encoding: gzip, deflate, br, Connection: keep-alive, Content-Length: 24, {
+    "name": "Keto"
+}]
+
