@@ -12,7 +12,7 @@ public class Server {
     public Server(ServerSocket serverSocket) {
         this.serverSocket = serverSocket;
         this.executorService = Executors.newFixedThreadPool(TOTAL_THREADS);
-        System.out.println("Server Started, waiting for Clients...");
+        System.out.println("Server Started, waiting for Clients...\n");
     }
 
     private void startServer() {
@@ -20,7 +20,7 @@ public class Server {
             while (!serverSocket.isClosed()) {
                 // new Client Connected
                 Socket clientSocket = serverSocket.accept();
-                System.out.println("Added a client");
+                // System.out.println("Added a client");
                 // Initialize IO streams by Handler Constructor
                 Handler clientHandler = new Handler(clientSocket);
                 executorService.execute(clientHandler::handleClientPerThread);

@@ -1,7 +1,5 @@
 package Request;
 
-import Common.Enums.DataTypes;
-
 import java.util.HashMap;
 import java.util.Map;
 
