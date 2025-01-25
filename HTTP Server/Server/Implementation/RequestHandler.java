@@ -23,16 +23,34 @@ public class RequestHandler {
     }
 
     public String handleClientRequest() throws IOException {
-        processRequest();
-        // This is just to check the console output
-        return requestHeaders.toString();
+        RequestLineHandler handler = new RequestLineHandler();
+        String requestLine;
+        String requestHeader;
+        String requestBody;
+
+        readRequest();
+
+        // Print the client request
+        System.out.println(requestHeaders);
+
+        requestLine = requestHeaders.getFirst();
+
+//        if(!requestLine.isEmpty()){
+//            handler.processRequestLine();
+//        }
+//        if(){
+//
+//        }
+        return "";
     }
 
-    private void processRequest() throws IOException {
+    // For reading the request form the buffer
+    private void readRequest() throws IOException {
         String line;
         int contentLength = 0;
         String requestBody;
 
+        // Read request and add in request Header
         if(bufferedReader.ready()){
             while((line = bufferedReader.readLine()) != null && !line.isEmpty()){
                 if(line.startsWith("Content-Length")){
@@ -42,18 +60,12 @@ public class RequestHandler {
             }
         }
 
-        if(contentLength != 0){
+        // Read content Body explicitly
+        if(contentLength > 0){
             char[] body = new char[contentLength];
             int charRead = bufferedReader.read(body,0,contentLength);
             requestBody = new String(body,0,charRead);
             requestHeaders.add(requestBody);
         }
-        print();
-    }
-
-    // These are requestLine and requestBody
-    private void print(){
-        System.out.println("First :"+requestHeaders.getFirst());
-        System.out.println("Last :"+requestHeaders.getLast());
     }
 }
